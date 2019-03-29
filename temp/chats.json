@@ -1,0 +1,46 @@
+[
+  {
+    "user": {
+      "name": "Jake",
+      "profile_pic_url": "https://avatarfiles.alphacoders.com/470/47010.jpg"
+    },
+    "message": {
+      "last_message": "Hi there...",
+      "last_message_time": "2",
+      "unread_message_count": ""
+    }
+  },
+  {
+    "user": {
+      "name": "Finn",
+      "profile_pic_url": "https://adventurenetwork.weebly.com/uploads/2/1/3/7/21379322/674078_orig.jpg"
+    },
+    "message": {
+      "last_message": "Hi!",
+      "last_message_time": "1",
+      "unread_message_count": ""
+    }
+  },
+  {
+    "user": {
+      "name": "Gunter",
+      "profile_pic_url": "https://i.pinimg.com/236x/73/d8/c8/73d8c8867c286d50818afb9ae8a46af2--adventure-time-gunter-animation.jpg"
+    },
+    "message": {
+      "last_message": "Hey",
+      "last_message_time": "5",
+      "unread_message_count": ""
+    }
+  },
+  {
+    "user": {
+      "name": "Unknown",
+      "profile_pic_url": ""
+    },
+    "message": {
+      "last_message": "...",
+      "last_message_time": "1",
+      "unread_message_count": ""
+    }
+  }
+]

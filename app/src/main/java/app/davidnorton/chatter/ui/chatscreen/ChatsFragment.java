@@ -3,11 +3,24 @@ package app.davidnorton.chatter.ui.chatscreen;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import app.davidnorton.chatter.R;
+import app.davidnorton.chatter.apiclient.ApiClient;
+import app.davidnorton.chatter.apiclient.ApiInterface;
+import app.davidnorton.chatter.ui.models.Chat;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ChatsFragment extends Fragment {
@@ -37,10 +50,43 @@ public class ChatsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initViews();
+        getChats();
     }
 
-    private void initViews()
-    {
+    private void initViews() {
+        initRecyclerView();
+    }
+
+    private RecyclerView mRecyclerView;
+    private ChatsAdapter mAdapter;
+
+    private void initRecyclerView() {
+        mRecyclerView= (RecyclerView) getView().findViewById(R.id.chatsRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void getChats() {
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ArrayList<Chat>> call = apiService.getChats();
+        call.enqueue(new Callback<ArrayList<Chat>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Chat>> call, Response<ArrayList<Chat>> response) {
+
+                Log.d("response:", response.body().toString());
+                Log.d("json response:", new Gson().toJson(response.body()));
+
+                mAdapter = new ChatsAdapter(response.body());
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Chat>> call, Throwable t) {
+
+            }
+        });
 
     }
 }
