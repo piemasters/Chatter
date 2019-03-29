@@ -1,4 +1,4 @@
-package app.davidnorton.chatter.ui.chatscreen;
+package app.davidnorton.chatter.ui.homescreen;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -78,7 +78,7 @@ public class ChatsFragment extends Fragment {
                 Log.d("response:", response.body().toString());
                 Log.d("json response:", new Gson().toJson(response.body()));
 
-                mAdapter = new ChatsAdapter(response.body());
+                mAdapter = new ChatsAdapter(getActivity(),response.body());
                 mRecyclerView.setAdapter(mAdapter);
             }
 

@@ -1,4 +1,4 @@
-package app.davidnorton.chatter.ui.chatscreen;
+package app.davidnorton.chatter.ui.homescreen;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import app.davidnorton.chatter.R;
 
 
-public class StatusFragment extends Fragment {
+public class CallsFragment extends Fragment {
 
-    public static StatusFragment newInstance() {
+    public static CallsFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        StatusFragment fragment = new StatusFragment();
+        CallsFragment fragment = new CallsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -25,7 +25,7 @@ public class StatusFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_status, container, false);
+        View view = inflater.inflate(R.layout.fragment_calls, container, false);
         return view;
     }
 

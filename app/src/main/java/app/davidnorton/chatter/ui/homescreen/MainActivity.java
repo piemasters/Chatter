@@ -1,4 +1,4 @@
-package app.davidnorton.chatter.ui.chatscreen;
+package app.davidnorton.chatter.ui.homescreen;
 
 import android.graphics.Color;
 import android.os.Bundle;
