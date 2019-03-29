@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "383747585273",
+    "firebase_url": "https://chatter-bf148.firebaseio.com",
+    "project_id": "chatter-bf148",
+    "storage_bucket": "chatter-bf148.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383747585273:android:9434fb9c35a3cefb",
+        "android_client_info": {
+          "package_name": "app.davidnorton.chatter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "383747585273-hl50nm5puk853feogdo61uu65oofk11t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdZIGb-HdeoOZessb5ifyjvGDCk-mu3-k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
