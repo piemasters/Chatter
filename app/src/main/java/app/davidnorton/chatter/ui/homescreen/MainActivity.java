@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ViewPager mViewPager;
-    private void initViewPager()
-    {
+    private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         List<String> tabNames = new ArrayList<String>();
         tabNames.add("Chats");
@@ -74,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private List<Fragment> mFragments;
-    private List<Fragment> getFragments()
-    {
+    private List<Fragment> getFragments() {
 
         mFragments = new ArrayList<Fragment>();
         mFragments.add(ChatsFragment.newInstance(""));
