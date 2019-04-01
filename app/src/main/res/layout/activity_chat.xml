@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/default_wallpaper"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -17,15 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <!--<?xml version="1.0" encoding="utf-8"?>
                 android:background="?attr/selectableItemBackgroundBorderless"
             -->
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                >
+                android:layout_height="?actionBarSize">
                 <!-- android:background="?attr/selectableItemBackgroundBorderless" will cause this Custom View to make ripple effect -->
 
                 <LinearLayout
@@ -41,8 +40,7 @@
                         android:id="@+id/userIV"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/pic"
-                        />
+                        android:src="@drawable/pic" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -54,7 +52,7 @@
                     android:paddingBottom="2dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="0dp"
-                    android:paddingTop="0dp" >
+                    android:paddingTop="0dp">
 
 
                     <TextView
@@ -67,8 +65,8 @@
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:maxLines="1"
+                        android:text="Anon"
                         android:textSize="18sp"
-                        android:text="Shayan Rais"
                         android:textStyle="bold" />
 
                     <TextView
@@ -78,8 +76,8 @@
                         android:layout_marginLeft="6dp"
                         android:layout_weight="0.4"
                         android:ellipsize="end"
-                        android:text="last seen 1 hour ago"
                         android:maxLines="1"
+                        android:text="last seen 1 hour ago"
                         android:textSize="12sp" />
 
 
@@ -89,4 +87,13 @@
 
 
     </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbarLayout">
+
+    </FrameLayout>
+
 </RelativeLayout>
