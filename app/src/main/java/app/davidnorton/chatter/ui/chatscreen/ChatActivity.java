@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import app.davidnorton.chatter.R;
 import app.davidnorton.chatter.ui.models.Chat;
+import app.davidnorton.chatter.ui.models.User;
 
 import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -19,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    public static final String EXTRAS_CHAT = "chat";
+    public static final String EXTRAS_USER = "user";
     public static final String tag = ChatActivity.class.getSimpleName();
 
     @Override
@@ -46,11 +47,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private Chat mChat;
+    private User mUser;
     private void setArguments() {
         Bundle bundle = getIntent().getExtras();
-        mChat = bundle.getParcelable(EXTRAS_CHAT);
-        if(mChat != null) {
-            setTitle(mChat.getUser().getName());
+        mUser = bundle.getParcelable(EXTRAS_USER);
+        if(mUser != null) {
+            setTitle(mUser.getName());
         }
     }
 
@@ -62,11 +64,10 @@ public class ChatActivity extends AppCompatActivity {
 
 
         TextView nameTV = (TextView) findViewById(R.id.nameTV);
-        nameTV.setText(mChat.getUser().getName());
-
+        nameTV.setText(mUser.getName());
 
         CircleImageView userIV = (CircleImageView) findViewById(R.id.userIV);
-        Picasso.with(this).load(mChat.getUser().getProfilePicUrl()).into(userIV);
+        Picasso.with(this).load(mUser.getProfilePicUrl()).into(userIV);
 
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override

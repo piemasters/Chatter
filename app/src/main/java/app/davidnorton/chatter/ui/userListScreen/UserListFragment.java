@@ -1,5 +1,6 @@
 package app.davidnorton.chatter.ui.userListScreen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import app.davidnorton.chatter.R;
 import app.davidnorton.chatter.ui.Database;
+import app.davidnorton.chatter.ui.chatscreen.ChatActivity;
 import app.davidnorton.chatter.ui.models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -53,20 +55,18 @@ public class UserListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private DatabaseReference mDatabase;
     private FirebaseRecyclerAdapter<User, UserViewHolder> mAdapter;
-    private void initRecyclerView()
-    {
+    private void initRecyclerView() {
         mRecyclerView= (RecyclerView) getView().findViewById(R.id.usersRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void getUsers()
-    {
+    private void getUsers() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Query userQuery = mDatabase.child(Database.NODE_USERS);
         mAdapter = new FirebaseRecyclerAdapter<User, UserViewHolder>(User.class, R.layout.item_user_list,
                 UserViewHolder.class, userQuery) {
             @Override
-            protected void populateViewHolder(final UserViewHolder viewHolder, final User model, final int position) {
+            protected void populateViewHolder(final UserViewHolder viewHolder, final User user, final int position) {
                 final DatabaseReference postRef = getRef(position);
 
                 // Set click listener for the whole post view
@@ -75,16 +75,16 @@ public class UserListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         // Launch PostDetailActivity
-//                        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-//                        intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        intent.putExtra(ChatActivity.EXTRAS_USER, user);
+                        startActivity(intent);
                     }
                 });
 
 
 
                 // Bind Post to ViewHolder, setting OnClickListener for the star button
-                viewHolder.bindToUser(model, new View.OnClickListener() {
+                viewHolder.bindToUser(user, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
 
