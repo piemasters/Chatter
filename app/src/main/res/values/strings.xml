@@ -7,4 +7,5 @@
         <item>United Kingdom</item>
     </string-array>
     <string name="profile_info_msg">Please provide your name and an optional profile photo</string>
+    <string name="activity_user_list_label">Select a contact</string>
 </resources>

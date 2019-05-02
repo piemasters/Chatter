@@ -1,5 +1,6 @@
 package app.davidnorton.chatter.ui.homescreen;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -15,8 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import  app.davidnorton.chatter.R;
-import  app.davidnorton.chatter.ui.common.adapters.ViewPagerTabAdapter;
+import app.davidnorton.chatter.R;
+import app.davidnorton.chatter.ui.common.adapters.ViewPagerTabAdapter;
+import app.davidnorton.chatter.ui.userListScreen.UserListActivity;
 import static app.davidnorton.chatter.ui.chatscreen.ChatActivity.tag;
 
 import java.util.ArrayList;
@@ -49,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, UserListActivity.class);
+                startActivity(intent);
             }
         });
     }

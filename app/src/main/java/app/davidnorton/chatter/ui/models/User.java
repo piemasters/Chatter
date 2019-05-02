@@ -3,17 +3,28 @@ package app.davidnorton.chatter.ui.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@IgnoreExtraProperties
 public class User implements Parcelable {
 
     @SerializedName("name")
     @Expose
-    private String name;
+    private String name = "";
     @SerializedName("profile_pic_url")
     @Expose
-    private String profilePicUrl;
+    private String profilePicUrl = "";
+    @SerializedName("last_seen")
+    @Expose
+    private String lastSeen = "";
+    @SerializedName("is_typing")
+    @Expose
+    private Boolean isTyping = false;
+    @SerializedName("status")
+    @Expose
+    private String status = "";
 
     public String getName() {
         return name;
@@ -31,6 +42,31 @@ public class User implements Parcelable {
         this.profilePicUrl = profilePicUrl;
     }
 
+    public String getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(String lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+    public Boolean getIsTyping() {
+        return isTyping;
+    }
+
+    public void setIsTyping(Boolean isTyping) {
+        this.isTyping = isTyping;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -40,6 +76,9 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.profilePicUrl);
+        dest.writeString(this.lastSeen);
+        dest.writeValue(this.isTyping);
+        dest.writeString(this.status);
     }
 
     public User() {
@@ -48,6 +87,9 @@ public class User implements Parcelable {
     protected User(Parcel in) {
         this.name = in.readString();
         this.profilePicUrl = in.readString();
+        this.lastSeen = in.readString();
+        this.isTyping = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.status = in.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
