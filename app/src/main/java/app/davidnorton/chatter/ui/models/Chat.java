@@ -12,7 +12,7 @@ public class Chat implements Parcelable {
     private User user;
     @SerializedName("message")
     @Expose
-    private Message message;
+    private ChatListMessage chatListMessage;
 
     public User getUser() {
         return user;
@@ -22,12 +22,12 @@ public class Chat implements Parcelable {
         this.user = user;
     }
 
-    public Message getMessage() {
-        return message;
+    public ChatListMessage getChatListMessage() {
+        return chatListMessage;
     }
 
-    public void setMessage(Message message) {
-        this.message = message;
+    public void setChatListMessage(ChatListMessage chatListMessage) {
+        this.chatListMessage  = chatListMessage;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Chat implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.user, flags);
-        dest.writeParcelable(this.message, flags);
+        dest.writeParcelable(this.chatListMessage, flags);
     }
 
     public Chat() {
@@ -46,7 +46,7 @@ public class Chat implements Parcelable {
 
     protected Chat(Parcel in) {
         this.user = in.readParcelable(User.class.getClassLoader());
-        this.message = in.readParcelable(Message.class.getClassLoader());
+        this.chatListMessage  = in.readParcelable(ChatListMessage.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Chat> CREATOR = new Parcelable.Creator<Chat>() {

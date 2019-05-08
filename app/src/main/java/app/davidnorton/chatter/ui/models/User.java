@@ -25,11 +25,13 @@ public class User implements Parcelable {
     @SerializedName("status")
     @Expose
     private String status = "";
+    @SerializedName("uid")
+    @Expose
+    private String uid = "";
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -37,7 +39,6 @@ public class User implements Parcelable {
     public String getProfilePicUrl() {
         return profilePicUrl;
     }
-
     public void setProfilePicUrl(String profilePicUrl) {
         this.profilePicUrl = profilePicUrl;
     }
@@ -45,7 +46,6 @@ public class User implements Parcelable {
     public String getLastSeen() {
         return lastSeen;
     }
-
     public void setLastSeen(String lastSeen) {
         this.lastSeen = lastSeen;
     }
@@ -53,7 +53,6 @@ public class User implements Parcelable {
     public Boolean getIsTyping() {
         return isTyping;
     }
-
     public void setIsTyping(Boolean isTyping) {
         this.isTyping = isTyping;
     }
@@ -61,11 +60,16 @@ public class User implements Parcelable {
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
 
+    public String getUid() {
+        return uid;
+    }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     @Override
     public int describeContents() {
@@ -79,6 +83,7 @@ public class User implements Parcelable {
         dest.writeString(this.lastSeen);
         dest.writeValue(this.isTyping);
         dest.writeString(this.status);
+        dest.writeString(this.uid);
     }
 
     public User() {
@@ -90,6 +95,7 @@ public class User implements Parcelable {
         this.lastSeen = in.readString();
         this.isTyping = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.status = in.readString();
+        this.uid= in.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

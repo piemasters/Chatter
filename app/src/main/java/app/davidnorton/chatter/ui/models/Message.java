@@ -1,78 +1,62 @@
 package app.davidnorton.chatter.ui.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Message implements Parcelable {
 
-    @SerializedName("last_message")
+@IgnoreExtraProperties
+public class Message {
+
+    @SerializedName("type")
     @Expose
-    private String lastMessage;
-    @SerializedName("last_message_time")
+    private String type;
+    @SerializedName("data")
     @Expose
-    private String lastMessageTime;
-    @SerializedName("unread_message_count")
+    private String data;
+    @SerializedName("status")
     @Expose
-    private String unreadMessageCount;
+    private String status;
+    @SerializedName("senderUid")
+    @Expose
+    private String senderUid;
+    @SerializedName("receiverUid")
+    @Expose
+    private String receiverUid;
 
-    public String getLastMessage() {
-        return lastMessage;
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
+    public String getData() {
+        return data;
+    }
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public String getLastMessageTime() {
-        return lastMessageTime;
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setLastMessageTime(String lastMessageTime) {
-        this.lastMessageTime = lastMessageTime;
+    public String getSenderUid() {
+        return senderUid;
+    }
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
     }
 
-    public String getUnreadMessageCount() {
-        return unreadMessageCount;
+    public String getReceiverUid() {
+        return receiverUid;
     }
-
-    public void setUnreadMessageCount(String unreadMessageCount) {
-        this.unreadMessageCount = unreadMessageCount;
+    public void setReceiverUid(String receiverUid) {
+        this.receiverUid = receiverUid;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.lastMessage);
-        dest.writeString(this.lastMessageTime);
-        dest.writeString(this.unreadMessageCount);
-    }
-
-    public Message() {
-    }
-
-    protected Message(Parcel in) {
-        this.lastMessage = in.readString();
-        this.lastMessageTime = in.readString();
-        this.unreadMessageCount = in.readString();
-    }
-
-    public static final Parcelable.Creator<Message> CREATOR = new Parcelable.Creator<Message>() {
-        @Override
-        public Message createFromParcel(Parcel source) {
-            return new Message(source);
-        }
-
-        @Override
-        public Message[] newArray(int size) {
-            return new Message[size];
-        }
-    };
 
 }
