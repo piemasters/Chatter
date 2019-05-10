@@ -15,13 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.ChangeEventListener;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
@@ -135,7 +138,9 @@ public class ChatFragment extends Fragment {
 
     private void initRecyclerView() {
         mRecyclerView= (RecyclerView) getView().findViewById(R.id.chatsRecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
     }
 
     private static final String SEND_IMAGE = "send_image";
@@ -218,30 +223,61 @@ public class ChatFragment extends Fragment {
         return chatMessages;
     }
 
-    private FirebaseRecyclerAdapter<Message, MessageViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder> mAdapter;
     private void loadChats() {
 
         String messageNode = getMessageNode();
         Query messageQuery = mDatabase.getReference().child(Database.NODE_MESSAGES).child(messageNode);
 
-        mAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
-                Message.class, R.layout.item_messsage, MessageViewHolder.class, messageQuery) {
+       /*
+       messageQuery.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               try
+               {
+                   Message message = dataSnapshot.getValue(Message.class);
+                   message.getData();
+               }catch (Exception e)
+               {
+                   e.printStackTrace();
+               }
+           }
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+           }
+       });
+       */
+
+        mAdapter = new FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder>(Message.class, R.layout.item_messsage_outgoing,
+                RecyclerView.ViewHolder.class, messageQuery) {
+
+            private final int TYPE_INCOMING = 1;
+            private final int TYPE_OUTGOING = 2;
+
             @Override
-            protected void populateViewHolder(final MessageViewHolder viewHolder, final Message message, final int position) {
-                final DatabaseReference postRef = getRef(position);
+            protected void populateViewHolder(final RecyclerView.ViewHolder viewHolder, final Message message, final int position) {
+                if(messageFromCurrentUser(message)) {
+                    populateOutgoingViewHolder((OutgoingViewHolder) viewHolder, message);
+                } else {
+                    populateIncomingViewHolder((IncomingViewHolder) viewHolder, message);
+                }
+            }
 
-                // Set click listener for the whole post view
-                final String postKey = postRef.getKey();
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Launch PostDetailActivity
-//                       Intent intent = new Intent(getActivity(), ChatActivity.class);
-//                       intent.putExtra(ChatActivity.EXTRAS_USER, user);
-//                       startActivity(intent);
-                    }
-                });
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view;
+                switch(viewType) {
+                    case TYPE_INCOMING:
+                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_incoming, parent, false);
+                        return new IncomingViewHolder(view);
+                    case TYPE_OUTGOING:
+                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_messsage_outgoing, parent, false);
+                        return new OutgoingViewHolder(view);
+                }
+                return super.onCreateViewHolder(parent, viewType);
+            }
 
+            private void populateIncomingViewHolder(IncomingViewHolder viewHolder, Message message) {
                 // Bind Post to ViewHolder, setting OnClickListener for the star button
                 viewHolder.bindToMessage(message, new View.OnClickListener() {
                     @Override
@@ -249,6 +285,115 @@ public class ChatFragment extends Fragment {
 
                     }
                 });
+            }
+
+            private void populateOutgoingViewHolder(OutgoingViewHolder viewHolder, Message message) {
+                // Bind Post to ViewHolder, setting OnClickListener for the star button
+                viewHolder.bindToMessage(message, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View starView) {
+
+                    }
+                });
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                super.getItemViewType(position);
+                Message message = getItem(position);
+
+                if(messageFromCurrentUser(message)) {
+                    return TYPE_OUTGOING;
+                }
+
+                return TYPE_INCOMING;
+            }
+
+            private boolean messageFromCurrentUser(Message message) {
+                String currentUid = mAuth.getCurrentUser().getUid();
+                if(currentUid.equalsIgnoreCase(message.getSenderUid())) {
+                    return true;
+                }
+                return false;
+            }
+
+            class IncomingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                TextView chatTV, timeTV;
+                ImageView chatIV;
+//                       messageStatusIV;
+
+                public IncomingViewHolder(View v){
+                    super(v);
+                    chatTV = (TextView) v.findViewById(R.id.chatTV);
+                    timeTV = (TextView) v.findViewById(R.id.timeTV);
+//                   messageStatusIV = (ImageView) v.findViewById(messageStatusIV);
+                    chatIV = (ImageView) v.findViewById(R.id.chatIV);
+                }
+
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                    }
+                }
+
+                public void bindToMessage(Message message, View.OnClickListener starClickListener) {
+
+//        if (!TextUtils.isEmpty(user.getProfilePicUrl())) {
+//            Picasso.with(userIV.getContext()).load(user.getProfilePicUrl()).into(userIV);
+//        }
+                    chatTV.setText(message.getData());
+                }
+            }
+
+            class OutgoingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                TextView chatTV, timeTV;
+                ImageView chatIV, messageStatusIV;
+
+                public OutgoingViewHolder(View v){
+                    super(v);
+                    chatTV = (TextView) v.findViewById(R.id.chatTV);
+                    timeTV = (TextView) v.findViewById(R.id.timeTV);
+                    messageStatusIV = (ImageView) v.findViewById(R.id.messageStatusIV);
+                    chatIV = (ImageView) v.findViewById(R.id.chatIV);
+                }
+
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                    }
+                }
+
+                public void bindToMessage(Message message, View.OnClickListener starClickListener) {
+
+//        if (!TextUtils.isEmpty(user.getProfilePicUrl())) {
+//            Picasso.with(userIV.getContext()).load(user.getProfilePicUrl()).into(userIV);
+//        }
+                    chatTV.setText(message.getData());
+                }
+            }
+
+
+            @Override
+            protected void onChildChanged(ChangeEventListener.EventType type, int index, int oldIndex) {
+                super.onChildChanged(type, index, oldIndex);
+
+                int lastPostion;
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                lastPostion = linearLayoutManager.findLastVisibleItemPosition();
+                if(lastPostion != -1 && type == ChangeEventListener.EventType.ADDED) {
+                    if(index > lastPostion) {
+                        onNewMessageReceived();
+                    }
+                }
+            }
+
+            private void onNewMessageReceived() {
+                int position = mAdapter.getItemCount() - 1;
+                mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
             }
         };
 
