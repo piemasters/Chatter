@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> getFragments() {
 
         mFragments = new ArrayList<Fragment>();
-        mFragments.add(ChatsFragment.newInstance(""));
+        mFragments.add(UserChatsFragment.newInstance(""));
         mFragments.add(StatusFragment.newInstance());
         mFragments.add(CallsFragment.newInstance());
 

@@ -1,9 +1,12 @@
 package app.davidnorton.chatter.ui.models;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class Message {

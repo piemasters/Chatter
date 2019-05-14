@@ -41,6 +41,7 @@ import app.davidnorton.chatter.R;
 import app.davidnorton.chatter.ui.Database;
 import app.davidnorton.chatter.ui.Util;
 import app.davidnorton.chatter.ui.models.User;
+import app.davidnorton.chatter.ui.models.UserChat;
 import app.davidnorton.chatter.ui.models.Message;
 import static app.davidnorton.chatter.ui.chatscreen.ChatActivity.EXTRAS_USER;
 
@@ -57,7 +58,7 @@ public class ChatFragment extends Fragment {
 
     private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
-    private User mUser;
+    private User mReceivingUser;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +66,7 @@ public class ChatFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance();
 
         Bundle bundle = getArguments();
-        mUser = bundle.getParcelable(EXTRAS_USER);
+        mReceivingUser  = bundle.getParcelable(EXTRAS_USER);
     }
 
     @Nullable
@@ -165,22 +166,35 @@ public class ChatFragment extends Fragment {
     private void writeTextMessage(String data) {
         Message message = new Message();
         message.setSenderUid(mAuth.getCurrentUser().getUid());
-        message.setReceiverUid(mUser.getUid());
+        message.setReceiverUid(mReceivingUser.getUid());
 
         message.setType("text");
         message.setData(data);
 
-        String messageNode = getMessageNode();
-        String node = mDatabase.getReference().child(Database.NODE_MESSAGES).child(messageNode).push().getKey();
-        mDatabase.getReference().child(Database.NODE_MESSAGES).child(messageNode).child(node).setValue(message);
+        String messagesNode = getMessagesNode();
+        String messageNode = mDatabase.getReference().child(Database.NODE_MESSAGES).child(messagesNode).push().getKey();
+        mDatabase.getReference().child(Database.NODE_MESSAGES).child(messagesNode).child(messageNode).setValue(message);
+
+        FirebaseUser sendingUser = mAuth.getCurrentUser();
+
+        UserChat userChat = new UserChat();
+        userChat.setUid(sendingUser.getUid());
+        userChat.setLastMessage(data);
+
+        // add user chat in sending user
+        mDatabase.getReference().child(Database.NODE_USER_CHATS).child(mReceivingUser.getUid()).child(sendingUser.getUid()).setValue(userChat);
+        userChat.setUid(mReceivingUser.getUid());
+
+        // add user chat in receiving user
+        mDatabase.getReference().child(Database.NODE_USER_CHATS).child(sendingUser.getUid()).child(mReceivingUser.getUid()).setValue(userChat);
     }
 
-    private String getMessageNode() {
+    private String getMessagesNode() {
         String messageNode = null;
         if(mAuth.getCurrentUser() != null) {
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
             String sendingUID = firebaseUser.getUid();
-            String receivingUID = mUser.getUid();
+            String receivingUID = mReceivingUser.getUid();
             messageNode = Util.getMessageNode(sendingUID, receivingUID);
         }
         return messageNode;
@@ -216,7 +230,8 @@ public class ChatFragment extends Fragment {
         jsonObject = new JSONObject(json);
         JSONArray jsonArray = (JSONArray) jsonObject.get("1");
 
-        Type listType = new TypeToken<List<ChatMessage>>() {}.getType();
+        Type listType = new TypeToken<List<ChatMessage>>() {
+        }.getType();
 
         chatMessages = new Gson().fromJson(jsonArray.toString(), listType);
 
@@ -226,7 +241,7 @@ public class ChatFragment extends Fragment {
     private FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder> mAdapter;
     private void loadChats() {
 
-        String messageNode = getMessageNode();
+        String messageNode = getMessagesNode();
         Query messageQuery = mDatabase.getReference().child(Database.NODE_MESSAGES).child(messageNode);
 
        /*
@@ -352,7 +367,7 @@ public class ChatFragment extends Fragment {
                 TextView chatTV, timeTV;
                 ImageView chatIV, messageStatusIV;
 
-                public OutgoingViewHolder(View v){
+                public OutgoingViewHolder(View v) {
                     super(v);
                     chatTV = (TextView) v.findViewById(R.id.chatTV);
                     timeTV = (TextView) v.findViewById(R.id.timeTV);
@@ -363,7 +378,7 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
+                    if (position != RecyclerView.NO_POSITION) {
                     }
                 }
 
@@ -376,7 +391,6 @@ public class ChatFragment extends Fragment {
                 }
             }
 
-
             @Override
             protected void onChildChanged(ChangeEventListener.EventType type, int index, int oldIndex) {
                 super.onChildChanged(type, index, oldIndex);
@@ -384,8 +398,9 @@ public class ChatFragment extends Fragment {
                 int lastPostion;
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                 lastPostion = linearLayoutManager.findLastVisibleItemPosition();
-                if(lastPostion != -1 && type == ChangeEventListener.EventType.ADDED) {
-                    if(index > lastPostion) {
+                if (lastPostion != -1 && type == ChangeEventListener.EventType.ADDED) {
+
+                    if (index > lastPostion) {
                         onNewMessageReceived();
                     }
                 }
@@ -398,6 +413,8 @@ public class ChatFragment extends Fragment {
         };
 
         mRecyclerView.setAdapter(mAdapter);
+
     }
+
 
 }
