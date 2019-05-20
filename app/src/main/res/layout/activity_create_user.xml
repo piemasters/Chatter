@@ -29,6 +29,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/newUserRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/profileInfoMsgTV"
@@ -52,6 +53,27 @@
             android:hint="Type your name here" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newUserRL">
+
+        <EditText
+            android:id="@+id/existingUserET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type your name here" />
+
+        <EditText
+            android:id="@+id/passwordET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/existingUserET"
+            android:hint="Type your name here" />
+
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/nextBtn"
