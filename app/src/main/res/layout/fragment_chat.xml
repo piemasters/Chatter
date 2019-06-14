@@ -23,7 +23,7 @@
         android:background="@drawable/rect_round"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/floatingButton">
 
@@ -41,6 +41,8 @@
             android:layout_weight="1"
             android:backgroundTint="@android:color/transparent"
             android:hint="Type a Message"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
             android:id="@+id/editText"/>
 
         <ImageButton

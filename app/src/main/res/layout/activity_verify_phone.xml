@@ -52,6 +52,8 @@
             android:id="@+id/countryCodeET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             android:text="+44"/>
 
         <EditText
@@ -59,6 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/countryCodeET"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
             android:hint="phone number"
             />
 

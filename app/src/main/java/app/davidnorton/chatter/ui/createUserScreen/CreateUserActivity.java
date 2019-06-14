@@ -8,9 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,15 +44,36 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
 
     private Button mNextButton;
     private EditText mUsernameET;
-    private EditText mExistingUserET, mPasswordET;
+    private EditText mExistingUserET, userProfilePicET;
 
     private void initViews() {
         mNextButton = (Button) findViewById(R.id.nextBtn);
         mNextButton.setOnClickListener(this);
         mUsernameET = (EditText) findViewById(R.id.userNameET);
-
+        mUsernameET = (EditText) findViewById(R.id.userNameET);
+        userProfilePicET = (EditText) findViewById(R.id.userProfilePicET);
         mExistingUserET = (EditText) findViewById(R.id.existingUserET);
-        mPasswordET = (EditText) findViewById(R.id.passwordET);
+
+        userProfilePicET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    //do what you want on the press of 'done'
+                    mNextButton.performClick();
+                }
+                return false;
+            }
+        });
+
+        mExistingUserET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    //do what you want on the press of 'done'
+                    mNextButton.performClick();
+                }
+                return false;
+            }
+        });
+
     }
 
 
@@ -58,14 +82,12 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.nextBtn:
                 onNextButtonClicked();
-
-//                Intent intent = new Intent(this, MainActivity.class);
-//                startActivity(intent);
                 break;
         }
     }
 
     String mUserName;
+    String userProfilePic;
 
     private void onNextButtonClicked() {
 
@@ -75,16 +97,18 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         }
 
         mUserName = mUsernameET.getText().toString();
-        if (!TextUtils.isEmpty(mUserName)) {
+        userProfilePic = userProfilePicET.getText().toString();
+        if (!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(userProfilePic)) {
             createUser();
         } else {
-            Toast.makeText(this, "User name can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Username & profile picture cannot be blank", Toast.LENGTH_LONG).show();
         }
     }
 
     private void loginExistingUser() {
-        String user = mExistingUserET.getText().toString();
-        String password = mPasswordET.getText().toString();
+        String user = mExistingUserET.getText().toString() + "@gmail.com";
+        //String password = mPasswordET.getText().toString();
+        String password = getIntent().getStringExtra("PHONE_NUMBER");
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -118,8 +142,9 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
     private void createUser() {
         mAuth = FirebaseAuth.getInstance();
         String email = mUserName + "@gmail.com";
+        String password = getIntent().getStringExtra("PHONE_NUMBER");
 
-        mAuth.createUserWithEmailAndPassword(email, mUserName)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -152,6 +177,7 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         User user = new User();
         user.setName(usernameFromEmail(firebaseUser.getEmail()));
         user.setUid(firebaseUser.getUid());
+        user.setProfilePicUrl(userProfilePic);
         mDatabase.child("users").child(firebaseUser.getUid()).setValue(user);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

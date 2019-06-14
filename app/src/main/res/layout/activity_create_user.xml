@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Profile Info"
+        android:text="New User Profile Info"
         android:textColor="#118C7E"
         android:textSize="18dp"
         android:textStyle="bold" />
@@ -38,42 +38,72 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="20dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userCIV"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="#c9c5c5"
-            android:src="@drawable/permission_cam" />
-
         <EditText
             android:id="@+id/userNameET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/userCIV"
+            android:inputType="text"
+            android:layout_marginBottom="30dp"
             android:hint="Type your name here" />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userCIV"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/userNameET"
+            android:src="@drawable/pic" />
+
+        <EditText
+            android:id="@+id/userProfilePicET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/userCIV"
+            android:layout_below="@id/userNameET"
+            android:inputType="text"
+            android:hint="Paste image URL here" />
+
+
     </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/newUserRL">
+
+        <TextView
+            android:id="@+id/existingProfileInfoTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="Existing User Login"
+            android:textColor="#118C7E"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/existingUserET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/existingProfileInfoTV"
+            android:inputType="text"
             android:hint="Type your name here" />
 
-        <EditText
-            android:id="@+id/passwordET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/existingUserET"
-            android:hint="Type your name here" />
+        <!--<EditText-->
+            <!--android:id="@+id/passwordET"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/existingUserET"-->
+            <!--android:inputType="text"-->
+            <!--android:imeOptions="actionNext"-->
+            <!--android:hint="Password" />-->
 
     </RelativeLayout>
-
 
     <Button
         android:id="@+id/nextBtn"

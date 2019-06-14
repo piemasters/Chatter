@@ -6,20 +6,14 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 exports.sendMessageNotification = functions.database.ref('/messages/{messageNode}/{message}').onWrite(
-event=>{
-	const messageNode = event.params.messageNode;
-	const message = event.params.message;
+(change,context) => {
 
-
-	console.log('messageNode:', messageNode, 'message', message);
-
-	const messageVal = event.data.val();
+	const messageVal = change.after.val();
 
 	const receiverUid = messageVal.receiverUid;
 	const senderUid = messageVal.senderUid;
 
 	console.log('receiverUid:', receiverUid, 'senderUid:', senderUid);
-
 
     const getInstanceIdPromise = admin.database().ref(`/users/${receiverUid}/instanceId`).once('value');
 
@@ -27,6 +21,7 @@ event=>{
 
 
     return Promise.all([getInstanceIdPromise, getReceiverUidPromise]).then(results => {
+                console.log('results ', results, 'results value[0]', results[0].val());
             const instanceId = results[0].val();
             const receiver = results[1];
             console.log('notifying ' + receiverUid + ' about ' + messageVal.data + ' from ' + senderUid);

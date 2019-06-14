@@ -51,13 +51,13 @@
             android:label="@string/activity_user_list_label"
             />
 
-        <!--<service-->
-            <!--android:name=".services.InstanceIdService"-->
-            <!--tools:ignore="ExportedService">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+        <service
+            android:name=".services.InstanceIdService"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".services.MessagingService"

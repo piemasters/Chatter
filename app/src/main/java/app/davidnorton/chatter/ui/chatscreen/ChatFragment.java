@@ -10,10 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -119,6 +121,16 @@ public class ChatFragment extends Fragment {
                 if(s.length() == 0) {
                     showAudioButton();
                 }
+            }
+        });
+
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    //do what you want on the press of 'done'
+                    mFabButton.performClick();
+                }
+                return false;
             }
         });
 
@@ -263,7 +275,7 @@ public class ChatFragment extends Fragment {
        });
        */
 
-        mAdapter = new FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder>(Message.class, R.layout.item_messsage_outgoing,
+        mAdapter = new FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder>(Message.class, R.layout.item_message_outgoing,
                 RecyclerView.ViewHolder.class, messageQuery) {
 
             private final int TYPE_INCOMING = 1;
@@ -286,7 +298,7 @@ public class ChatFragment extends Fragment {
                         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_incoming, parent, false);
                         return new IncomingViewHolder(view);
                     case TYPE_OUTGOING:
-                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_messsage_outgoing, parent, false);
+                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_outgoing, parent, false);
                         return new OutgoingViewHolder(view);
                 }
                 return super.onCreateViewHolder(parent, viewType);

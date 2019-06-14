@@ -17,11 +17,16 @@ import android.view.View;
 
 import app.davidnorton.chatter.R;
 import app.davidnorton.chatter.ui.common.adapters.ViewPagerTabAdapter;
+import app.davidnorton.chatter.ui.chatscreen.ChatActivity;
+import app.davidnorton.chatter.ui.models.User;
 import app.davidnorton.chatter.ui.userListScreen.UserListActivity;
+import app.davidnorton.chatter.ui.welcomeScreen.WelcomeActivity;
 import static app.davidnorton.chatter.ui.chatscreen.ChatActivity.tag;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,9 +34,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
+    }
+
+    private void init() {
+        initData();
         initViews();
     }
 
+    private void initData() {
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null)
+        {
+            User user = bundle.getParcelable(ChatActivity.EXTRAS_USER);
+            if(user != null)
+            {
+                Intent intent = new Intent(this, ChatActivity.class);
+                intent.putExtra(ChatActivity.EXTRAS_USER, user);
+                startActivity(intent);
+            }
+        }
+    }
     private void initViews() {
         initToolbar();
         initNewMessageFloatingButton();
@@ -40,13 +63,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
 
     private void initNewMessageFloatingButton() {
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,7 +125,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, WelcomeActivity.class));
+            finish();
             return true;
         }
 
